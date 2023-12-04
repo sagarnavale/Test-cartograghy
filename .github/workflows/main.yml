@@ -29,5 +29,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: detect-secrets-results
-          path: detect-secrets-results.txt
+          path: result.txt
 
