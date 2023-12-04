@@ -7,22 +7,27 @@ on:
   
 
 jobs:
-  build:
+  detect-secrets:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.x
 
-      - name: Install dependencies
-        run: |
-          pip install detect-secrets
+      - name: Install Dependencies
+        run: pip install detect-secrets
 
       - name: Run detect-secrets
-        run: |
-          detect-secrets scan --baseline .secrets.baseline .
+        run: detect-secrets scan
+
+      - name: Upload Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: detect-secrets-results
+          path: detect-secrets-results.txt
+
