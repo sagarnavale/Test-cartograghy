@@ -1,4 +1,5 @@
 name: Secret Scan
+description: A custom GitHub Action
 
 on:
   pull_request:
