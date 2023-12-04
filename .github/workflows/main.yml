@@ -5,34 +5,21 @@ on:
     branches: [main]
 
 jobs:
-  test-python:
-    strategy:
-      matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
-
+  check-for-secrets:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+      - name: Run Yelp's detect-secrets
+        uses: RobertFischer/detect-secrets-action@v2.0.0
         with:
-          python-version: ${{ matrix.python-version }}
+          DS_ADDL_ARGS: --output txt
 
-      - name: Setup Poetry
-        uses: pronovic/setup-poetry@v1
+      - name: Upload secrets report
+        uses: actions/upload-artifact@v2
         with:
-          version: "1.4.1"
-          cache-venv: "true"
-          cache-poetry: "true"
-
-      - name: Install dependencies
-        run: |
-          poetry install --with dev
-
-      - name: Run tests
-        run: |
-          source ./.venv/bin/activate
-          pytest
+          name: secrets-report
+          path: 'secrets-report.txt'
+          
