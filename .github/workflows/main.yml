@@ -23,7 +23,7 @@ jobs:
         run: pip install detect-secrets
 
       - name: Run detect-secrets
-        run: detect-secrets scan --all-files --output result.txt
+        run: detect-secrets scan --all-files > result.txt
 
       - name: Upload Results
         uses: actions/upload-artifact@v2
