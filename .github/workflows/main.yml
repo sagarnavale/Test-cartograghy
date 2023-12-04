@@ -1,25 +1,28 @@
 name: code scanning
+
 on:
   push:
   pull_request:
     branches: [main]
+  
 
 jobs:
-  check-for-secrets:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run Yelp's detect-secrets
-        uses: RobertFischer/detect-secrets-action@v2.0.0
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          DS_ADDL_ARGS: --output txt
+          python-version: 3.8
 
-      - name: Upload secrets report
-        uses: actions/upload-artifact@v2
-        with:
-          name: secrets-report
-          path: 'secrets-report.txt'
-          
+      - name: Install dependencies
+        run: |
+          pip install detect-secrets
+
+      - name: Run detect-secrets
+        run: |
+          detect-secrets scan --baseline .secrets.baseline .
